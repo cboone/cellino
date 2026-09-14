@@ -23,7 +23,7 @@ Measured on 2026-09-14.
   - Three Claude Code project directories, `~/.claude/projects/-Users-ctm-Development-cellino`, `...-cellino--worktrees-phase-0`, and `...-cellino--worktrees-plan-phases`. They hold transcripts; their memory directories are empty.
 - Lint baselines:
   - The build plan passes `prettier --check`. `README.md` fails it because it has no trailing newline.
-  - `markdownlint-cli2`, with no repo config, reports MD013 on build plan lines 492 to 495 and MD047 on `README.md`.
+  - `markdownlint-cli2`, with no repo config, applies its 80-column default and reports 290 MD013 findings on the build plan and nothing else, plus MD047 on `README.md`.
   - `typos` is clean, and accepts `Savera.clap`, `savera_impl`, `SAVERA_FORMATS`, `SAVERA_SIGNING_IDENTITY`, `Svra`, `SVRA`, and `com.catamountaudio.savera.presets`.
 - Name clash: Orchestral Tools sells [Svara](https://www.orchestraltools.com/svara), an Indian film orchestra sample library for SINE Player, shipped as AU, VST, and AAX. That is why Stage 0 exists.
 
@@ -266,7 +266,7 @@ Repository, on `main` after the merge:
 - `git log --follow --oneline docs/plans/2026-09-13-savera-build-plan.md` goes back to `7081c6f`.
 - `git diff 5c9c603 -- docs/design` shows exactly one changed line.
 - `prettier --check README.md docs/plans/2026-09-13-savera-build-plan.md` passes.
-- `markdownlint-cli2 README.md docs/plans/2026-09-13-savera-build-plan.md` reports only the four MD013 findings on lines 492 to 495 that are already there.
+- `markdownlint-cli2 README.md docs/plans/2026-09-13-savera-build-plan.md` reports the build plan's 290 MD013 findings, on the same lines as before the rename, and nothing for `README.md`.
 - `typos` is clean.
 
 GitHub:
