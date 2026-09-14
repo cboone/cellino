@@ -2,7 +2,7 @@
 
 ## Scope
 
-This issue covers **only** the acoustic modelling and sound synthesis side of Cellino: the reed model, the air supply, the instrument architecture, and the validation strategy. Plugin hosting, format, UI, parameter automation, and build infrastructure are deliberately out of scope here and belong in separate issues.
+This issue covers **only** the acoustic modelling and sound synthesis side of Savera: the reed model, the air supply, the instrument architecture, and the validation strategy. Plugin hosting, format, UI, parameter automation, and build infrastructure are deliberately out of scope here and belong in separate issues.
 
 The target instrument is specifically the **Indian hand harmonium (peti)**: a small, pressure-blown, free-reed box where the player pumps a hinged bellows with the left hand and plays the keyboard with the right. Not the foot-pumped European harmonium, and not the suction-driven American reed organ — those differ in reed geometry, rank count, and air supply dynamics.
 
