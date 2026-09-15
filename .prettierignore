@@ -1,0 +1,32 @@
+# Prettier formats every file type it supports here, because the text lint job
+# (cboone/gh-actions lint-text.yml) runs `prettier --check .`. This file is what
+# keeps that from reaching anything nobody here authors, or anything that must
+# not change.
+
+# Preserved verbatim as the source brainstorm the build plan grew from.
+# Reformatting it would edit a historical record, and Prettier would: run with
+# this file bypassed (`--ignore-path /dev/null`), it flags the brainstorm.
+# `.markdownlint-cli2.jsonc` ignores the same directory for the same reason; the
+# two lists are kept in step by hand, because neither tool can read the other's.
+docs/design/
+
+# npm writes this file, so its layout is npm's to decide and no formatter should
+# be judging it. Prettier 3.9.6 does not flag it today (measured 2026-09-14);
+# the entry stops a future npm or Prettier release from turning a lockfile
+# update into a formatting failure.
+package-lock.json
+
+# Prettier already skips `node_modules/` with no configuration. It is listed
+# because the reader's question is whether a dependency's files can be
+# reformatted, and an empty answer is not one.
+node_modules/
+
+# Build outputs and working material. Nothing here is authored. Prettier also
+# honours .gitignore, which covers these already; they are named so this file
+# answers the question on its own.
+build/
+zig-out/
+zig-pkg/
+.zig-cache/
+dist/
+verification/

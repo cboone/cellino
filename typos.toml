@@ -1,0 +1,36 @@
+[default]
+extend-ignore-re = [
+  # Every GitHub Action here is pinned by commit and the pins get explained in
+  # prose, so short SHAs appear throughout this repository's Markdown. typos
+  # already skips 40-character hex strings and not 7-character ones, which
+  # makes a short SHA read as a misspelling of whatever word it resembles.
+  # This suppresses the class rather than the occurrences that exist today: it
+  # recurs on every documented pin and every commit a plan cites. Anchored on
+  # the backticks rather than on a word boundary, because an unanchored version
+  # would also swallow hex-alphabet words in running text.
+  "`[0-9a-f]{7,40}`",
+
+  # The escape hatch a document needs in order to quote what this tool catches.
+  # typos has no inline directive at 1.50.1, so a plan or a note that spells a
+  # misspelling out, which is the only way to explain one, fails the check it
+  # is explaining. A marked span is narrower than excluding the file: it is
+  # visible in the diff, it names itself, and it ends. An unclosed `off` marker
+  # suppresses nothing rather than everything after it.
+  "(?s)<!-- spellchecker:off -->.*?<!-- spellchecker:on -->",
+]
+
+# No `extend-words` or `extend-identifiers` table yet, deliberately. A word is
+# added only when typos flags it, with the reason beside it, so no entry here
+# suppresses nothing. See docs/notes/linters.md for which table a word belongs
+# in: `extend-words` allows a word wherever it appears, while typos splits an
+# identifier into words before judging it.
+
+[files]
+extend-exclude = [
+  "zig-out/",
+  "zig-pkg/",
+  "build/",
+  ".zig-cache/",
+  "node_modules/",
+  "verification/",
+]

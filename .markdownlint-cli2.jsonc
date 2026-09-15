@@ -1,0 +1,70 @@
+{
+  "config": {
+    // Prose paragraphs are single long lines; the editor handles visual
+    // wrapping. Hard-wrapping at a column makes diffs noisy when a sentence
+    // in the middle of a paragraph changes.
+    "MD013": false,
+
+    // Duplicate headings are fine under different parents. ADRs reuse
+    // "Context", "Decision", and "Consequences" across files, amendment
+    // sections repeat within one, and sections like "Verification" recur
+    // legitimately in plans.
+    "MD024": { "siblings_only": true },
+
+    // Inline HTML is used sparingly where Markdown has no equivalent.
+    "MD033": false,
+
+    // Prettier owns emphasis style, and the default "consistent" cannot
+    // express what it does. Prettier writes `_emphasis_` everywhere except
+    // where the emphasis falls inside a word, because CommonMark does not
+    // read an underscore there as emphasis, so it correctly leaves those
+    // asterisks alone. "consistent" then takes the first such asterisk as the
+    // file's expected style and reports every underscore after it, which is
+    // what fosforo measured in one of its plans. `false` is the only setting
+    // that survives a case Prettier gets right, and it costs nothing, because
+    // the formatter decides this before the linter is asked.
+    "MD049": false,
+
+    // Pin the table style rather than letting it be inferred per table,
+    // which otherwise reports contradictory "compact" and "aligned"
+    // expectations within the same document. Prettier is what makes this
+    // affordable: its table output satisfies "aligned" exactly, so this rule
+    // verifies an auto-fixer rather than naming one misaligned pipe per error
+    // with no remedy but hand-padding.
+    "MD060": { "style": "aligned" },
+  },
+
+  // The Phase 0 gate's relative-link check. For every relative link, it
+  // asserts that the linked file exists and that a `#fragment` names a heading
+  // in that file. Built-in MD051 checks fragments only within the same file,
+  // so a broken cross-file anchor, the common case between ADRs, notes and the
+  // build plan, is seen by this rule alone. It resolves from node_modules, so
+  // it needs `npm ci`; CI's text lint job runs that in the workspace because
+  // it uses the consumer's lockfile.
+  "customRules": ["markdownlint-rule-relative-links"],
+
+  "globs": ["**/*.md"],
+
+  "ignores": [
+    // Load-bearing, and the failure it prevents is loud but confusing:
+    // markdownlint-cli2 walks into node_modules and lints dependency READMEs.
+    // fosforo measured a single installed package carrying one misaligned
+    // table taking a clean run from 0 errors to 2, naming a file nobody there
+    // wrote. Prettier skips node_modules itself; this tool does not.
+    "node_modules/**",
+
+    // Build outputs and working material. Nothing here is authored.
+    "build/**",
+    "zig-out/**",
+    "zig-pkg/**",
+    ".zig-cache/**",
+    "dist/**",
+    "verification/**",
+
+    // Preserved verbatim as the source brainstorm the build plan grew from.
+    // Linting it would ask for edits to a historical record: with this entry
+    // removed, it reports 13 issues. `.prettierignore` excludes the same
+    // directory for the same reason, and the two are kept in step by hand.
+    "docs/design/**",
+  ],
+}
