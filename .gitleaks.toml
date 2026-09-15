@@ -3,19 +3,21 @@
 useDefault = true
 
 [allowlist]
-# Paths to exclude from scanning. package-lock.json is deliberately absent:
-# it pins the text lint tools and is scanned like any other file.
+# Paths to exclude from scanning. Two files are deliberately absent.
+#
+# package-lock.json pins the text lint tools and is scanned like any other
+# file.
+#
+# build.zig.zon, the Zig manifest arriving in Phase 1, is scanned too. Its
+# dependency multihashes looked like a reason to exclude it, as fosforo and
+# springer do, but measured with gitleaks 8.30.1 on 2026-09-14, three real Zig
+# manifests (fosforo's, carrying both 0.16-style package hashes, seine's and
+# strength's) produced no finding with no allowlist at all. A path entry would
+# suppress nothing today while hiding every other line of the manifest from
+# the only secret check here that can fail. If a manifest is ever flagged, add
+# the specific value under `regexes`, with the finding as the reason, rather
+# than excluding the file.
 paths = [
-  # Zig pins dependencies by multihash. Those literals look enough like
-  # high-entropy credentials to trip the generic rules, and they are
-  # deliberately public. The file arrives with the build skeleton in Phase 1;
-  # the entry is written now because this allowlist is authored once and the
-  # reason is already known. Anchored to the repository root, because an
-  # unanchored pattern suppresses every path containing the name: measured
-  # with gitleaks 8.30.1 on 2026-09-14, it skipped a planted key in
-  # docs/build.zig.zon, and the anchored form still flagged it.
-  '''^build\.zig\.zon$''',
-
   # CMake and Zig build outputs, including fetched third-party trees.
   '''^build/''',
   '''^zig-out/''',

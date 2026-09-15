@@ -14,7 +14,7 @@ A physical model that can only be exercised by loading it into a digital audio w
 
 Three layers, with the dependency arrow pointing one way only ([Source layout](../plans/2026-09-13-savera-build-plan.md#source-layout)):
 
-- **`src/model/`** takes a sample rate, an oversampling factor and parameter values as plain arguments, and returns samples and named state. It may name a sample rate, because a DSP core cannot avoid one. It may not name a CLAP type, a sample offset or a note id.
+- **`src/model/`** takes the internal sample rate and parameter values as plain arguments, and returns samples and named state. There is no oversampling factor: [ADR 0011](./0011-fixed-internal-sample-rate.md) fixes the model at one internal rate, so the build plan's Source layout wording that names one describes the design before that decision. It may name a sample rate, because a DSP core cannot avoid one. It may not name a CLAP type, a sample offset or a note id.
 - **`src/engine/`** knows about sample offsets, note ids, voices and events. It may not name a CLAP struct.
 - **`src/clap/`** is the only place a CLAP type appears.
 

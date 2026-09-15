@@ -81,7 +81,7 @@ When a word does need adding, the table matters:
 
 Two `extend-ignore-re` entries are already present, each with its reason in the file: a backtick-anchored pattern for short commit SHAs in prose, and a `<!-- spellchecker:off -->` to `<!-- spellchecker:on -->` span, which is the only way a document can quote a misspelling in order to explain it.
 
-**A word typos flags inside `docs/design/` is suppressed in `typos.toml`, never fixed in the brainstorm.**
+**typos scans `docs/design/`; nothing excludes it.** The brainstorm passes today. If a later typos release flags a word in it, the typos job fails, and the repair is to add that word to `typos.toml` with the finding as the reason, never to edit the brainstorm.
 
 ## actionlint needs shellcheck
 
@@ -89,7 +89,7 @@ actionlint shells out to shellcheck for every `run:` block. With no shellcheck o
 
 ## gitleaks
 
-`.gitleaks.toml` extends the default rules and allowlists `build.zig.zon`, the build directories, and `fixtures/*.wav` and `fixtures/*.npz`. Measured on 2026-09-14 with gitleaks 8.30.1 in a scratch directory outside the repository:
+`.gitleaks.toml` extends the default rules and allowlists the build directories, and `fixtures/*.wav` and `fixtures/*.npz`. It does not allowlist `build.zig.zon`: three real Zig manifests, with no allowlist at all, produced no finding, so an entry would hide the whole manifest to suppress nothing. The comments in the file record that measurement and the rule for adding a value if a manifest is ever flagged. Measured on 2026-09-14 with gitleaks 8.30.1 in a scratch directory outside the repository:
 
 - The `aws-access-token` rule matches `AKIA` followed by 16 characters from the base32 alphabet `[A-Z2-7]`. A candidate containing `0`, `1`, `8` or `9` is not flagged at all, so a planted key must use that alphabet or its silence means nothing.
 - Nothing in the default rules excludes `.wav`: a key in a root-level `.wav` is flagged.
