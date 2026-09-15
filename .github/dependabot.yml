@@ -1,0 +1,77 @@
+# Dependabot keeps two surfaces current, and neither is the plugin itself.
+#
+# 1. github-actions: every external `uses:` reference, including the reusable
+#    cboone/gh-actions workflows and its install-pinned-tool action. These are
+#    SHA-pinned with a trailing `# vX.Y.Z` comment, and Dependabot updates the
+#    SHA and the comment together. `directory: /` scans .github/workflows/,
+#    which is every workflow here; this repository has no composite actions of
+#    its own yet, and one added under .github/actions/ needs its own entry.
+# 2. npm: the text lint tools in package.json, pinned exactly.
+#    `versioning-strategy: increase` bumps those exact pins rather than
+#    widening them to a caret range, so a linter pin only ever moves in a diff
+#    that says so.
+#
+# Dependabot does NOT see the typos `version` and `checksum` inputs in
+# text-lint.yml, which are plain strings rather than `uses:` references, and
+# from Phase 1 it will not see anything pinned in build.zig.zon, for which it
+# has no ecosystem. `upgrade-everything` sweeps those.
+#
+# Weekly rather than daily, because every update is a pull request and this
+# repository has one maintainer. Minor and patch land grouped; majors open
+# individually so a breaking change stays visible.
+#
+# Dependabot reads this file only from the default branch, so it takes effect
+# after the pull request that adds it merges.
+
+version: 2
+updates:
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: weekly
+      day: monday
+      time: "09:00"
+      timezone: America/New_York
+    open-pull-requests-limit: 10
+    labels:
+      - dependencies
+    commit-message:
+      prefix: "chore(deps)"
+    groups:
+      github-actions-minor-patch:
+        patterns:
+          - "*"
+        update-types:
+          - minor
+          - patch
+      github-actions-major:
+        patterns:
+          - "*"
+        update-types:
+          - major
+
+  - package-ecosystem: npm
+    directory: /
+    schedule:
+      interval: weekly
+      day: monday
+      time: "09:00"
+      timezone: America/New_York
+    versioning-strategy: increase
+    open-pull-requests-limit: 5
+    labels:
+      - dependencies
+    commit-message:
+      prefix: "chore(deps)"
+    groups:
+      npm-minor-patch:
+        patterns:
+          - "*"
+        update-types:
+          - minor
+          - patch
+      npm-major:
+        patterns:
+          - "*"
+        update-types:
+          - major
