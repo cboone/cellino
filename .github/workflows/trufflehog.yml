@@ -1,0 +1,25 @@
+name: trufflehog
+
+# No paths-ignore, deliberately. See gitleaks.yml.
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  # Named for the tool rather than `scan`; see gitleaks.yml for the reason.
+  trufflehog:
+    uses: cboone/gh-actions/.github/workflows/scan-for-secrets.yml@0d53592f40b487f01b26b374e539c517fa9c570f # v3.2.0
+    with:
+      tool: trufflehog
+      # Carried from fosforo, which measured 53s max over 28 runs. Not yet
+      # measured here. See gitleaks.yml for why this is an input.
+      timeout-minutes: 3

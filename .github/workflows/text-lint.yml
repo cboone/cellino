@@ -1,0 +1,145 @@
+name: text-lint
+
+# This workflow carries no paths-ignore, deliberately.
+#
+# A check must not be able to skip the change that governs it. typos.toml,
+# .markdownlint-cli2.jsonc, .prettierrc.json, .prettierignore and this file all
+# live inside the set these jobs read, and in Phase 0 nearly every change is a
+# Markdown change. The paths-ignore that Phase 1's ci.yml will correctly carry,
+# skipping docs/** and *.md for a set of macOS builds, would make this workflow
+# green on precisely the pull requests that could fail it. paths-ignore is
+# workflow-level, so no job here could be exempted from it either.
+#
+# `pull_request:` is bare. A `branches:` filter matches the base ref, so a pull
+# request stacked on another feature branch would run none of these jobs and
+# nothing would say so.
+#
+# Ubuntu throughout: this is platform-independent static analysis, and the
+# macOS runner bills at ten times the rate.
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+# Caller jobs are named for what they check. A reusable workflow's rollup rows
+# are `<caller job> / <inner job>`, so these read `text / Text lint`,
+# `shell / Shell lint` and `actions / actionlint`, distinct from each other and
+# from the secret-scanning workflows' rows.
+jobs:
+  # markdownlint over `**/*.md`, which includes the relative-links custom rule,
+  # then Prettier over every file type it supports (`prettier --check .`). That
+  # is the reusable workflow's order, and it is the reverse of the local fix
+  # order (format first, then lint) documented in docs/notes/linters.md. Its
+  # Prettier step also runs only when markdownlint passed, so a change with
+  # both kinds of defect shows the Prettier half only after the markdownlint
+  # half is fixed (cboone/gh-actions#112).
+  #
+  # `use-consumer-versions: true` installs both tools from this repository's
+  # package-lock.json with `npm ci` in the workspace, so local runs and CI
+  # resolve identical versions with per-package integrity. It is also what lets
+  # the markdownlint-rule-relative-links entry in .markdownlint-cli2.jsonc
+  # resolve: the rule is not in gh-actions' own pinned tool tree.
+  #
+  # cspell is off: typos covers the same ground, and two spell checkers means
+  # two dictionaries to add every word to. yamllint is off: it is not part of
+  # the gate, Prettier owns YAML formatting and actionlint owns workflow
+  # semantics.
+  #
+  # The timeout is carried, not measured: fosforo's Ubuntu static-analysis
+  # floor is 3, and this job gets 5 for its `npm ci` of the whole tool tree.
+  # Re-measure from this repository's runs; see docs/notes/ci-workflows.md.
+  text:
+    uses: cboone/gh-actions/.github/workflows/lint-text.yml@0d53592f40b487f01b26b374e539c517fa9c570f # v3.2.0
+    with:
+      use-consumer-versions: true
+      run-markdownlint: true
+      run-prettier: true
+      run-cspell: false
+      run-yamllint: false
+      timeout-minutes: 5
+
+  # Passes by finding nothing in Phase 0, which adds no shell scripts. Wired
+  # now, exercised from Phase 1.
+  #
+  # Phase 1 hazard: lint-shell.yml discovers `*.sh` and `*.bash` anywhere, but
+  # extensionless scripts only under bin/, scripts/ and script/
+  # (cboone/gh-actions#86). The extensionless scripts Phase 1 adds under cmake/
+  # would go unlinted, which reads exactly like passing. Phase 1 switches to
+  # shebang-based discovery:
+  #
+  #   git ls-files -z | xargs -0 shfmt -f | xargs -r shellcheck
+  shell:
+    uses: cboone/gh-actions/.github/workflows/lint-shell.yml@0d53592f40b487f01b26b374e539c517fa9c570f # v3.2.0
+    with:
+      timeout-minutes: 3
+
+  # Since v3.2.0 this installs a pinned, checksum-verified shellcheck and
+  # reports both tool versions before running actionlint
+  # (cboone/gh-actions#85). actionlint shells out to shellcheck for every
+  # `run:` block and, with no shellcheck on PATH, skips them all and still
+  # exits 0. The version report in that job's log is the positive control.
+  actions:
+    uses: cboone/gh-actions/.github/workflows/lint-github-actions.yml@0d53592f40b487f01b26b374e539c517fa9c570f # v3.2.0
+    with:
+      timeout-minutes: 3
+
+  # Its own job because no reusable workflow runs typos: lint-text.yml offers
+  # markdownlint, Prettier, cspell and yamllint, and nothing else.
+  typos:
+    runs-on: ubuntu-latest
+    # Carried from fosforo's typos job, 14s max over its first 27 runs, where 3
+    # is the floor its Ubuntu static-analysis jobs share. Not yet measured here.
+    timeout-minutes: 3
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      # Pinned by version and by the tarball's SHA-256, because a release asset
+      # can be replaced in place under the same tag and a dictionary ships
+      # inside the binary, so a new release can introduce findings with no
+      # change on this side. The URL names the x86_64 asset literally because
+      # ubuntu-latest is x86_64 and the one checksum applies to one asset.
+      # `./typos` is the member exactly as `tar -tf` lists it; GNU tar treats
+      # `./typos` and `typos` as different members.
+      #
+      # Dependabot moves this action's SHA but cannot see `version` or
+      # `checksum`. Bump those two together, with `shasum -a 256` on the asset.
+      - uses: cboone/gh-actions/actions/install-pinned-tool@0d53592f40b487f01b26b374e539c517fa9c570f # v3.2.0
+        with:
+          tool: typos
+          version: "1.50.1"
+          url-template: https://github.com/crate-ci/typos/releases/download/v{version}/typos-v{version}-x86_64-unknown-linux-musl.tar.gz
+          checksum: edf0545109aee6a22751d04ddecb97c45be47d3aa0409564fb895eeeace91b1e
+          archive-member: ./typos
+
+      # Confirms the pin resolved to the intended version, so a checksum bumped
+      # without its version, or the reverse, fails here rather than silently
+      # checking against a different dictionary than the tree was cleared with.
+      - name: Report tool version
+        run: typos --version
+
+      # No arguments: typos defaults to `.`, finds typos.toml by walking up from
+      # there, and respects .gitignore. It exits 2 on a finding, which is what
+      # gates the job.
+      - name: Check spelling
+        id: typos
+        run: typos
+
+      # Only on the failing path, so the passing path pays nothing for it.
+      - name: Summarize the findings
+        if: failure() && steps.typos.outcome == 'failure'
+        run: |
+          {
+            echo "### typos"
+            echo
+            echo '```text'
+            typos --format brief || true
+            echo '```'
+          } >> "${GITHUB_STEP_SUMMARY}"
