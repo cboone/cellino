@@ -22,6 +22,8 @@ Tuning is internal tables plus per-note tuning expressions. Continuous pitch mov
 
 **The keyboard-native path is the continuous harmonium mapping.** West, Puranik, Scavone and Wanderley built it into a sensor-retrofitted harmonium: the sounding pitch is interpolated between two held keys, `p = (1 − w′) p₁ + w′ p₂` with `w′ = min(1, w₂ / w₁)` from the two key depths, and the amplitude follows the key-press weight. `p` is a pitch, so this path drives the same reed family as the glide. It works in Logic because polyphonic key pressure is delivered per key ([ADR 0013](./0013-keys-are-continuous-valves.md)), which matters because clap-wrapper translates pitch bend there to a fixed two-semitone tuning expression ([ADR 0023](./0023-one-note-port-and-one-stereo-output.md)).
 
+**The mapping's zero-depth cases are open, and Phase 9 closes them before implementing it.** As published, `w′` divides by the first key's depth `w₁`, and ADR 0013 allows a held key at zero depth, so two held keys at zero depth give `0 / 0` and a zero-depth first key under a pressed second key has no defined pitch. Phase 9 defines the pitch and weight in both cases, keeps `w′` finite and continuous as `w₁` approaches zero, and covers both in the swept-frequency oracle vector with an explicit NaN rejection, so no non-finite value can reach the reed family.
+
 **The beyond-acoustic phase adds the tables.** Temperament tables, Gandhar tuning after Chimote and Oke's 22 shruti with per-key lower and upper selection, twelve per-key offsets, and per-note tuning expressions in semitones, all in Phase 9.
 
 **Draft `clap.tuning` is not implemented**, because no host ships it, and reaching a draft extension is a deliberate act ([ADR 0004](./0004-clap-bindings-via-translate-c.md)).

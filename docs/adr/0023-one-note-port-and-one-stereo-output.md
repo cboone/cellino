@@ -14,7 +14,7 @@ One note input port, id `0`, declaring the CLAP, MIDI and MIDI-MPE dialects with
 
 ## Consequences
 
-**CLAP preferred gains note ids where the host has them.** Voices are matched on the full `(port, channel, key, note_id)` tuple with wildcards, so a host that issues an id only at note-on still releases the right voice.
+**CLAP preferred gains note ids where the host has them.** Voices are matched on the full `(port, channel, key, note_id)` tuple with wildcards, following CLAP's own rule in `clap/events.h`: a `-1` in any part of the tuple matches a voice with any value there. So a note-off that carries no note id releases every voice sounding on that port, channel and key. When notes do not overlap on a key, that is the one voice a host issuing ids only at note-on expects to release. When two notes overlap on the same key, only host note ids can release them independently; without ids, both release together, which is the specified behaviour, not a lost voice. The same rule applies to raw MIDI note-offs, which carry no id. Phase 4's host harness plants the duplicate-key case, with and without note ids.
 
 **Note expressions have defined destinations.** `PRESSURE` and `EXPRESSION` feed key depth and per-voice pressure ([ADR 0013](./0013-keys-are-continuous-valves.md)); `TUNING` is the per-note pitch input in semitones ([ADR 0018](./0018-tuning-tables-and-a-reed-family.md)); `BRIGHTNESS` maps to the aperture scale. `VOLUME`, `PAN` and `VIBRATO` are mapped or ignored explicitly, and the choice is doc-commented where it is made.
 
