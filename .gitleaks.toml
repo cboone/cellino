@@ -10,8 +10,11 @@ paths = [
   # high-entropy credentials to trip the generic rules, and they are
   # deliberately public. The file arrives with the build skeleton in Phase 1;
   # the entry is written now because this allowlist is authored once and the
-  # reason is already known.
-  '''build\.zig\.zon''',
+  # reason is already known. Anchored to the repository root, because an
+  # unanchored pattern suppresses every path containing the name: measured
+  # with gitleaks 8.30.1 on 2026-09-14, it skipped a planted key in
+  # docs/build.zig.zon, and the anchored form still flagged it.
+  '''^build\.zig\.zon$''',
 
   # CMake and Zig build outputs, including fetched third-party trees.
   '''^build/''',

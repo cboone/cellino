@@ -611,7 +611,7 @@ Executed on 2026-09-14 on `feature/phase-0`, in [pull request #1](https://github
 ### Exit criteria, measured
 
 - **CI green on the scaffolding.** On the clean head `df70dbd`, and again on the fully reverted `72f4a74`: `text / Text lint`, `shell / Shell lint`, `actions / actionlint`, `typos`, `gitleaks / gitleaks` and `trufflehog / trufflehog` all passed (text-lint runs 34915386623 and 34915723980). Positive controls read from the logs: `npm ci` in the workspace installed 89 packages, markdownlint-cli2 0.23.2 linted 43 files with 0 issues, Prettier reported every file clean, actionlint 1.7.12 ran with ShellCheck 0.11.0, typos 1.50.1 installed against its checksum, and gitleaks scanned 27 commits with no leaks.
-- **Every relative link resolves.** markdownlint with `markdownlint-rule-relative-links` reports 0 issues, and P3, P4 and P13 prove the rule is the instrument, locally and in CI.
+- **Every relative link resolves.** markdownlint with `markdownlint-rule-relative-links` reports 0 issues, and P3 and P4 prove the rule catches both kinds of broken link, locally and in CI. P13 proves, locally, that no built-in rule would catch them without it.
 - **The preserved brainstorm is untouched.** Its SHA-256 is still `ee012eff0fa93b1ae73dc311e516e1c709ab30b15319bfbfcd0f1bb91ce13529`, and `git diff --exit-code main -- docs/design/` is empty. The negative control holds: Prettier with its ignore file bypassed flags it, exit 1.
 - **The deviation record is present**, with an entry for every catalog issue from #339 to #347 and each installed skill Phase 0 scoped down or replaced.
 - **`AGENTS.md` is under budget and `CLAUDE.md` is its symlink**, checked by hand; the size is recorded in the build plan's Phase 0 outcomes.

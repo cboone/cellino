@@ -18,7 +18,7 @@ Three layers, with the dependency arrow pointing one way only ([Source layout](.
 - **`src/engine/`** knows about sample offsets, note ids, voices and events. It may not name a CLAP struct.
 - **`src/clap/`** is the only place a CLAP type appears.
 
-Enforce the innermost boundary mechanically, with a run-time source walk: `build.zig` hands a test the source root, the test walks `src/model/`, and it asserts that no file mentions `clap/c.zig` or an import path that resolves to the CLAP bindings.
+Enforce the CLAP half of the innermost boundary mechanically, with a run-time source walk: `build.zig` hands a test the source root, the test walks `src/model/`, and it asserts that no file mentions `clap/c.zig` or an import path that resolves to the CLAP bindings. The sample-offset and note-id half is held by review. Those are engine concepts expressed as ordinary integers, with no import a source walk could key on, so a mechanical check for them would be a vocabulary search that either misses a renamed field or refuses a legitimate one.
 
 ## Consequences
 
