@@ -10,7 +10,7 @@ The name is Hindi and Urdu for "dawn", said sa-VEH-ra. The product and display n
 
 ## Current state
 
-Phase 0 of eleven, the repository foundation: agent config, lint and secret-scanning CI, the twenty-three ADRs, and the notes. **Nothing builds yet, by design.** There is no `build.zig`, no `build.zig.zon` and no `src/`; they arrive in Phase 1 with `ci.yml`, which reads its toolchain from `build.zig.zon`.
+Phase 0 of eleven, the repository foundation, is complete: agent config, lint and secret-scanning CI, the twenty-three ADRs, and the notes. Phase 1, the shell in both formats, is next, with Phase 2's Python harness able to run beside it. **Nothing builds yet, by design.** There is no `build.zig`, no `build.zig.zon` and no `src/`; they arrive in Phase 1 with `ci.yml`, which reads its toolchain from `build.zig.zon`.
 
 The sequencing, the phase gates, the findings and the verification program live in [the build plan](docs/plans/2026-09-13-savera-build-plan.md). **It is permanent and never leaves `docs/plans/`**; per-phase plans are separate dated files in `docs/plans/todo/` that move to `docs/plans/done/` when their pull request merges. What has landed is recorded in the build plan's phase outcomes subsections, not here.
 

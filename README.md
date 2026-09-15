@@ -14,19 +14,19 @@ What it is meant to become: a peti whose reed, air supply and wooden box are mod
 
 Eleven phases. [The build plan](docs/plans/2026-09-13-savera-build-plan.md) holds the reasoning, the sequencing and the exit criteria for each, and [the brainstorm](docs/design/peti-physical-model-brainstorm.md) is the background it came from. Issues are filed one phase at a time, so a phase marked planned deliberately has none yet.
 
-| Phase | Scope                                                                                     | Status      |
-| ----- | ----------------------------------------------------------------------------------------- | ----------- |
-| 0     | Repository foundation: agent config, CI, lint configuration, ADRs, notes                  | In progress |
-| 1     | The shell in both formats, with a placeholder sine voice: loads in Logic as an instrument | Planned     |
-| 2     | The single reed: the Python harness, the Zig model, the oracle                            | Planned     |
-| 3     | Parameters, state, the modulation flags and CC learn                                      | Planned     |
-| 4     | The engine: voices, block splitting, the resampler, latency and tail                      | Planned     |
-| 5     | The air path: reservoir, pallets, drones, the male bank across the keyboard               | Planned     |
-| 6     | The sound: cabinet filter, pump generator, noise, calibration, presets                    | Planned     |
-| 7     | Release v0.1.0: a signed, notarized installer                                             | Planned     |
-| 8     | The full instrument, v0.2.0: three banks, coupler, scale changer, tremolo                 | Planned     |
-| 9     | Beyond the acoustic instrument, v0.3.0: modulators, glides, tuning tables                 | Planned     |
-| 10    | Optional, each gated by a measurement: modal reed, hybrid engine, MTS-ESP, GUI            | Deferred    |
+| Phase | Scope                                                                                     | Status   |
+| ----- | ----------------------------------------------------------------------------------------- | -------- |
+| 0     | Repository foundation: agent config, CI, lint configuration, ADRs, notes                  | Complete |
+| 1     | The shell in both formats, with a placeholder sine voice: loads in Logic as an instrument | Planned  |
+| 2     | The single reed: the Python harness, the Zig model, the oracle                            | Planned  |
+| 3     | Parameters, state, the modulation flags and CC learn                                      | Planned  |
+| 4     | The engine: voices, block splitting, the resampler, latency and tail                      | Planned  |
+| 5     | The air path: reservoir, pallets, drones, the male bank across the keyboard               | Planned  |
+| 6     | The sound: cabinet filter, pump generator, noise, calibration, presets                    | Planned  |
+| 7     | Release v0.1.0: a signed, notarized installer                                             | Planned  |
+| 8     | The full instrument, v0.2.0: three banks, coupler, scale changer, tremolo                 | Planned  |
+| 9     | Beyond the acoustic instrument, v0.3.0: modulators, glides, tuning tables                 | Planned  |
+| 10    | Optional, each gated by a measurement: modal reed, hybrid engine, MTS-ESP, GUI            | Deferred |
 
 Phases 4, 5 and 6 together are the first playable instrument, and Phase 7 ships it.
 

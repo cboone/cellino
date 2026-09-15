@@ -388,6 +388,33 @@ Phases 4, 5 and 6 together are the first playable instrument and Phase 7 ships i
 
 Issues are filed just in time, one milestone per phase, when a phase becomes the next one. A milestone marks what has to close before that phase's gate is met, not what is one of its numbered steps. Each issue lands its code and its verification together in one PR.
 
+### Phase 0 outcomes (complete)
+
+Executed on 2026-09-14 in [pull request #1](https://github.com/cboone/savera/pull/1), and detailed in [the Phase 0 plan](done/2026-09-14-savera-phase-0-repository-foundation.md), which carries the step table, the filled plant table and every deviation.
+
+| Work                                                                                                                                               | Status |
+| -------------------------------------------------------------------------------------------------------------------------------------------------- | ------ |
+| `AGENTS.md` as a hub recording that this plan never leaves `docs/plans/`, the `CLAUDE.md` symlink, `.claude/settings.json`                         | Done   |
+| `text-lint.yml`, `gitleaks.yml` and `trufflehog.yml` on `cboone/gh-actions` v3.2.0, with no `paths-ignore`; Dependabot                             | Done   |
+| Prettier owning formatting, markdownlint verifying with the relative-links rule, `docs/design/` excluded from both, `typos.toml`, `.gitleaks.toml` | Done   |
+| `docs/notes/` with its README, the linter and CI notes, and `skill-deviations.md`                                                                  | Done   |
+| The twenty-three ADRs and their index                                                                                                              | Done   |
+| `.github/*.instructions.md`, CONTRIBUTING, the code of conduct, the security policy, the pull request template, the README                         | Done   |
+
+What landed differently from this plan's Phase 0 row, each deliberately:
+
+- **`cboone/gh-actions` moved to v3.2.0 on 2026-09-14**, the day after the Environment status table was measured. It releases `set-up-clap-validator`, which resolves the Risks entry for its release timing, and it fixed the `lint-text.yml` defect that made springer inline its text lint job, so this repository calls that workflow with `use-consumer-versions: true`.
+- **Catalog issue #345, `plant-defects`, closed before Phase 0 ran**, so the finding row above that lists the Zig and audio skills as unwritten is no longer true of that one. Phase 0 used it directly. The rest, #339 to #344 and #346 to #347, are still open, and the deviation record has an entry for each.
+- **`typos.toml` carries no word list.** Nothing in the tree was flagged, including the brainstorm and the ADRs, so a word joins only when typos flags it.
+- **The relative-link gate is automated** through `markdownlint-rule-relative-links`, which checks file existence and heading fragments. The brainstorm's byte identity and `AGENTS.md`'s size stay by-hand checks.
+- **`AGENTS.md` starts as a hub over `docs/notes/`** rather than a flat gotchas list, and pull request titles use sentence case with no type prefix.
+- **Two gate items do less than they appear to.** The shell job passes by finding nothing until Phase 1. The TruffleHog job cannot fail at all, because `scan-for-secrets.yml` runs TruffleHog without `--fail`, and TruffleHog exits 0 without it even when it reports a finding; filed as [cboone/gh-actions#111](https://github.com/cboone/gh-actions/issues/111). gitleaks is the secret check that can go red.
+- **`lint-text.yml` hides findings.** It runs markdownlint before Prettier and skips Prettier once markdownlint fails, so a second CI plant was needed to prove Prettier's arm; filed as [cboone/gh-actions#112](https://github.com/cboone/gh-actions/issues/112). Two catalog issues were filed from the scaffolding skills as well, [cboone/agent-harness-plugins#431](https://github.com/cboone/agent-harness-plugins/issues/431) and [#432](https://github.com/cboone/agent-harness-plugins/issues/432).
+
+**Exit criteria, all met.** CI was green on the clean head and on the fully reverted head (text-lint runs 34915386623 and 34915723980), with the positive controls read from the logs: 43 Markdown files linted with 0 issues, ShellCheck 0.11.0 present for actionlint, typos 1.50.1 installed against its checksum, 27 commits scanned by gitleaks. Every relative link resolves. The brainstorm is byte-identical, SHA-256 `ee012eff0fa93b1ae73dc311e516e1c709ab30b15319bfbfcd0f1bb91ce13529`, and Prettier run with its ignore file bypassed flags it. The deviation record has an entry for each catalog issue the phase re-derived by hand. Every lint instrument was proven by a planted defect, locally and in CI (runs 34915549681 and 34915665708), and the gitleaks allowlist by a local plant and its control. `AGENTS.md` measured 15,103 characters against its 30,000 budget, and `CLAUDE.md` is its symlink.
+
+Nothing builds, by design: `build.zig.zon` and `ci.yml` arrive together in Phase 1.
+
 ## The verification program
 
 Adopting fosforo's principle directly: _a test asserts a property of the code; planting a defect asserts a property of the test, and the second does not follow from the first._ Each instrument below is validated by planting the exact defect it claims to catch and confirming it goes red, and the plant table for each phase lives in that phase's plan.
@@ -452,7 +479,7 @@ Recorded here so they are visibly refusals rather than omissions.
 - **`aumu` with note input through clap-wrapper is unmeasured here.** The build helper honours the explicit type, PR #493 added the MIDI path, and neither sibling exercised an instrument. Phase 1 exists to find out early. Status: open until Phase 1.
 - **Bitwig is a new host for this family.** Nothing in fosforo's host notes covers it. Its licence, its CLAP behaviour and its voice stack are all Phase 3 findings. Status: open.
 - **`auval` will probably never see this plugin.** A clap-wrapper property the siblings measured; Logic is the only complete check. Status: accepted.
-- **gh-actions release timing.** `set-up-clap-validator` is on `main` and unreleased. Phase 1 consumes it from the first release that ships it, and copies fosforo's composite action as the documented fallback if that release has not been cut. Status: open until Phase 1.
+- **gh-actions release timing.** `set-up-clap-validator` is on `main` and unreleased. Phase 1 consumes it from the first release that ships it, and copies fosforo's composite action as the documented fallback if that release has not been cut. Status: resolved on 2026-09-14, when `cboone/gh-actions` v3.2.0 released `set-up-clap-validator`.
 - **Parameter count in Logic's generic list.** The first release carries about fifty parameters and the full instrument well over a hundred, which is the strongest argument for pulling the GUI forward from Phase 10. `module` paths and AUv2 ordering are the mitigation until then. Status: accepted.
 - **Numba lags Python releases.** The harness pins a Python version Numba supports, and that pin is a scheduled update, not an accident. Status: accepted.
 - **Zig 0.17 will move things.** Runtime vector indexing is already forbidden in 0.16, the float-mode builtin is slated for removal in favour of typed reals, and translate-c changed backends. Scoping the float mode per file and coercing vectors to arrays are the migration-safe idioms. Status: accepted.
