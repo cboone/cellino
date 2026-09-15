@@ -1,3 +1,53 @@
+# System
+.DS_Store
+
+# Agent config
+.claude/settings.local.json
+
+# Secrets
+.env
+.env.*
+!.env.example
+!.env.sample
+*.pem
+*.key
+*.p12
+# App Store Connect API keys, which notarytool takes as --key. Downloadable once
+# and never again, so the copy on disk is the only copy.
+*.p8
+credentials.json
+token.json
+
+# Release artifacts, signed and notarized locally (ADR 0021)
+dist/
+
+# Zig
 .zig-cache/
 zig-out/
+zig-pkg/
 *.o
+*.d
+*.pdb
+
+# CMake (clap-wrapper builds)
+build/
+
+# Node, which is here only for the tools that format and verify text.
+# `package.json` and `package-lock.json` are tracked, because the lockfile is
+# the pin; the tree it installs is not.
+node_modules/
+
+# Verification material
+#
+# `verification/` holds captures, renders, and purchased reference audio. The
+# captures and renders are working artifacts of one session, and the purchased
+# sample libraries must never reach a public history: their licences forbid
+# redistribution. The numbers measured out of any of them belong in a plan or a
+# note; the audio does not belong in the repository. Committed CC0 reference
+# cuts live in `fixtures/` instead.
+#
+# The directory is tracked through its `.gitkeep` so the path always exists. In
+# fosforo, one capture reached a commit before the equivalent rule existed, and
+# removing it meant rewriting three commits.
+verification/*
+!verification/.gitkeep
