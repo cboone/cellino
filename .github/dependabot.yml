@@ -18,7 +18,10 @@
 #
 # Weekly rather than daily, because every update is a pull request and this
 # repository has one maintainer. Minor and patch land grouped; majors open
-# individually so a breaking change stays visible.
+# individually so a breaking change stays visible. That is why each ecosystem
+# has a minor-and-patch group and no major group: a group matching every major
+# update would collect them all into one pull request, and an update that
+# matches no group gets a pull request of its own.
 #
 # Dependabot reads this file only from the default branch, so it takes effect
 # after the pull request that adds it merges.
@@ -44,11 +47,6 @@ updates:
         update-types:
           - minor
           - patch
-      github-actions-major:
-        patterns:
-          - "*"
-        update-types:
-          - major
 
   - package-ecosystem: npm
     directory: /
@@ -70,8 +68,3 @@ updates:
         update-types:
           - minor
           - patch
-      npm-major:
-        patterns:
-          - "*"
-        update-types:
-          - major

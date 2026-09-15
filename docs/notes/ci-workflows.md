@@ -42,7 +42,7 @@ Every reusable call, and the `install-pinned-tool` action, is pinned to v3.2.0 a
 
 ## The TruffleHog job cannot fail
 
-`scan-for-secrets.yml` at v3.2.0 runs `trufflehog git file://. --results=verified,unknown` with no `--fail`, and TruffleHog exits 0 whenever `--fail` is absent, including when it reports a finding. Measured on 2026-09-14 with TruffleHog 3.97.4 on a throwaway local repository holding a committed AWS-shaped key pair:
+`scan-for-secrets.yml` at v3.2.0 runs `trufflehog git file://. --results=verified,unknown` with no `--fail`, and TruffleHog exits 0 whenever `--fail` is absent, including when it reports a finding. Measured on 2026-09-14 on a throwaway local repository holding a committed AWS-shaped key pair, with TruffleHog 3.95.2, the version `scan-for-secrets.yml` v3.2.0 installs by default (release asset checksum-verified), and again with 3.97.4, which gave identical results:
 
 | Invocation                                                             | Output                           | Exit |
 | ---------------------------------------------------------------------- | -------------------------------- | ---- |
@@ -89,4 +89,4 @@ Sourcing one config from the base branch would not close that, because the same 
 
 ## Dependabot
 
-`.github/dependabot.yml` covers the `github-actions` and `npm` ecosystems, weekly, with minor and patch updates grouped and majors opened individually. Dependabot reads that file only from the default branch, so it takes effect after the pull request that adds it merges. From Phase 1 it will not see anything pinned in `build.zig.zon`, for which it has no ecosystem.
+`.github/dependabot.yml` covers the `github-actions` and `npm` ecosystems, weekly, with minor and patch updates grouped and majors opened individually. The individual majors come from having no major group at all: a group whose pattern matches every major update collects them into one pull request, which is what fosforo's config, the model for this one, actually does despite its comment saying otherwise. Dependabot reads that file only from the default branch, so it takes effect after the pull request that adds it merges. From Phase 1 it will not see anything pinned in `build.zig.zon`, for which it has no ecosystem.
