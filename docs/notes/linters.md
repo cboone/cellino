@@ -45,6 +45,10 @@ Measured on 2026-09-14 with 5.1.2, against a planted file: a missing file and a 
 
 It resolves from `node_modules`, so it needs `npm ci`. An unresolvable rule fails loudly rather than being skipped: measured on 2026-09-14, markdownlint-cli2 0.23.2 with the rule installed nowhere exits 2 with `ERR_MODULE_NOT_FOUND`. On a machine whose global Node modules include the rule, which a global markdownlint config can require, even a Homebrew markdownlint-cli2 run outside the repository loads it, at whatever version is installed there, so a local pass without `npm ci` does not prove the pinned rule ran.
 
+**Every finding in `AGENTS.md` is reported twice**, once for `AGENTS.md` and once for `CLAUDE.md`, because markdownlint-cli2's `**/*.md` glob follows the symlink and lints the same file under both names. Measured on 2026-09-14 with a planted broken link, which produced `AGENTS.md:131` and `CLAUDE.md:131`. The duplicate is expected; fix the finding in `AGENTS.md` and both disappear.
+
+**No built-in rule sees a broken cross-file link.** Measured on 2026-09-14: with `customRules` removed from the config, a link to a missing file and a link to a real ADR with a bad fragment both passed with 0 issues.
+
 **The pull request template links `CONTRIBUTING.md` by absolute URL.** GitHub resolves a relative link in a template against the pull request page, not the template file, so a relative link there is broken where it is read even though this rule would accept it.
 
 ## What is excluded, and the negative controls that prove the exclusions work
