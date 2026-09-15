@@ -117,6 +117,9 @@ jobs:
       # Confirms the pin resolved to the intended version, so a checksum bumped
       # without its version, or the reverse, fails here rather than silently
       # checking against a different dictionary than the tree was cleared with.
+      - name: Plant
+        run: echo $GITHUB_SHA $RUNNER_TEMP/x
+
       - name: Report tool version
         run: typos --version
 

@@ -13,5 +13,5 @@ Each file here records how some part of this project actually behaves: what was 
 | Note                                      | Read it before                                                                                              |
 | ----------------------------------------- | ----------------------------------------------------------------------------------------------------------- |
 | [CI workflows](./ci-workflows.md)         | editing anything under `.github/workflows/` or `.github/dependabot.yml`, or reading a pull request's checks |
-| [Linters](./linters.md)                   | running or configuring Prettier, markdownlint, typos, actionlint or gitleaks                                |
+| [Linters](./linters.md) | running or configuring Prettier, markdownlint, typos, actionlint or gitleaks                                |
 | [Skill deviations](./skill-deviations.md) | doing by hand something a catalog skill should do, or writing one of those skills from this project         |

@@ -127,3 +127,5 @@ The depth behind the rules is in [`docs/notes/`](docs/notes/README.md), one docu
 - **Is it a settled decision?** Then it is an ADR, and [Non-negotiables](#non-negotiables) gets one line pointing at it.
 - **Is it a measurement, a refusal, or how some area behaves?** Then it is a note in [`docs/notes/`](docs/notes/README.md), and nothing is added here. This is the common case.
 - **Is it what has landed?** Then it belongs in the build plan's phase outcomes, or in `CHANGELOG.md`. [Current state](#current-state) is orientation, not a record.
+
+See [the missing note](docs/notes/does-not-exist.md) and [ADR 0003](docs/adr/0003-author-clap-project-outward.md#no-such-heading).
