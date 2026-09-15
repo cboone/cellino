@@ -75,6 +75,12 @@ Every timeout was carried from fosforo when the workflows landed. They are ceili
 
 For the reusable calls the timeout is a `timeout-minutes` input, not a job key, because the job belongs to the reusable workflow. Since gh-actions v3.2.0, `scan-for-secrets.yml` applies it to its `Validate inputs` job as well.
 
+## What a pull request can change about its own checks
+
+Every check here runs on `pull_request`, and for that event GitHub runs the workflow definitions and reads the configuration from the pull request's own merge commit. So a pull request can change what judges it: it can add a path to `.gitleaks.toml`'s allowlist, a word to `typos.toml`, an entry to `.prettierignore` or `.markdownlint-cli2.jsonc`, or edit or delete a workflow outright, and the checks it leaves standing will pass.
+
+Sourcing one config from the base branch would not close that, because the same pull request could remove the job that reads it. `pull_request_target` would, but it runs with the base repository's permissions against untrusted code, which is the more dangerous trade. The control is review: a change to any file under `.github/workflows/`, or to `.gitleaks.toml`, `typos.toml`, `.prettierignore`, `.markdownlint-cli2.jsonc` or `.prettierrc.json`, is a change to a gate, and it gets read as one. Raised by Copilot's review of PR #1 on 2026-09-14 for `.gitleaks.toml`. If the project ever takes outside contributions, CODEOWNERS on those paths with required review is the mechanical form of the same control.
+
 ## Moving a pin
 
 - **Actions and reusable workflows:** Dependabot opens the pull request weekly. Before accepting a `cboone/gh-actions` bump, read the release notes for inputs that changed default behaviour.

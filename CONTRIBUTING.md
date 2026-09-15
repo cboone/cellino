@@ -26,7 +26,7 @@ Several are **refusals**: things the project considered and declined. Savera mod
 Before Phase 1 there is no code, so everything here is static analysis over text. The build toolchain arrives with the Phase 1 skeleton.
 
 - **Node.js 22 or later**, for the text lint tools. `markdownlint-cli2` and `markdownlint-rule-relative-links` both require it, and `.npmrc` sets `engine-strict=true`, so `npm ci` fails at once with `EBADENGINE` on an older runtime. CI runs Node 24.
-- **typos**, **actionlint**, **shellcheck** and **gitleaks**: `brew install typos-cli actionlint shellcheck gitleaks`. actionlint needs shellcheck on `PATH`, or it skips every `run:` block and still exits 0.
+- **typos**, **actionlint**, **shellcheck**, **shfmt** and **gitleaks**: `brew install typos-cli actionlint shellcheck shfmt gitleaks`. actionlint needs shellcheck on `PATH`, or it skips every `run:` block and still exits 0. shfmt has no script to check before Phase 1, but the pull request template asks for it on any shell change.
 
 ```bash
 npm ci   # Prettier, markdownlint-cli2 and the relative-links rule, at the pinned versions
