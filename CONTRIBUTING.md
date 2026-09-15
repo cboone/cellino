@@ -38,7 +38,7 @@ From Phase 1 onward, development also needs Zig 0.16.0 exactly (pinned in `build
 
 ### Checks
 
-All of these also run in CI.
+Every check below also runs in CI. `npm run format` is the exception: it is the local fixer, which writes files, and CI runs its check form, `npm run format:check`, instead.
 
 ```bash
 npm run format                     # Prettier writes

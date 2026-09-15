@@ -4,14 +4,14 @@ What runs on a push or a pull request, what each job actually judges, and the co
 
 ## The workflows
 
-| Workflow         | Job          | Rollup rows                                               | What it judges                                                                          |
-| ---------------- | ------------ | --------------------------------------------------------- | --------------------------------------------------------------------------------------- |
-| `text-lint.yml`  | `text`       | `text / Text lint`                                        | Prettier over every supported file type, then markdownlint with the relative-links rule |
-| `text-lint.yml`  | `shell`      | `shell / Shell lint`                                      | shellcheck and shfmt over discovered shell scripts; finds none before Phase 1           |
-| `text-lint.yml`  | `actions`    | `actions / actionlint`                                    | actionlint over every workflow, with a pinned shellcheck for `run:` blocks              |
-| `text-lint.yml`  | `typos`      | `typos`                                                   | typos over the tracked tree                                                             |
-| `gitleaks.yml`   | `gitleaks`   | `gitleaks / Validate inputs`, `gitleaks / gitleaks`       | gitleaks over the full history, with `.gitleaks.toml`                                   |
-| `trufflehog.yml` | `trufflehog` | `trufflehog / Validate inputs`, `trufflehog / trufflehog` | TruffleHog over the full history. **Cannot fail**; see below                            |
+| Workflow         | Job          | Rollup rows                                               | What it judges                                                                                                                    |
+| ---------------- | ------------ | --------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------- |
+| `text-lint.yml`  | `text`       | `text / Text lint`                                        | markdownlint with the relative-links rule, then Prettier over every supported file type, which is skipped when markdownlint fails |
+| `text-lint.yml`  | `shell`      | `shell / Shell lint`                                      | shellcheck and shfmt over discovered shell scripts; finds none before Phase 1                                                     |
+| `text-lint.yml`  | `actions`    | `actions / actionlint`                                    | actionlint over every workflow, with a pinned shellcheck for `run:` blocks                                                        |
+| `text-lint.yml`  | `typos`      | `typos`                                                   | typos over the tracked tree                                                                                                       |
+| `gitleaks.yml`   | `gitleaks`   | `gitleaks / Validate inputs`, `gitleaks / gitleaks`       | gitleaks over the full history, with `.gitleaks.toml`, which it discovers in the source directory without `allowlist-config`      |
+| `trufflehog.yml` | `trufflehog` | `trufflehog / Validate inputs`, `trufflehog / trufflehog` | TruffleHog over the full history. **Cannot fail**; see below                                                                      |
 
 `ci.yml`, the Zig build, test and bundle workflow, arrives in Phase 1 with `build.zig.zon`, which it reads for the toolchain.
 

@@ -81,7 +81,7 @@ What is planned is in the build plan's [Source layout](docs/plans/2026-09-13-sav
 
 ## Development
 
-Everything that runs before Phase 1 is static analysis, and all of it also runs in CI.
+Everything that runs before Phase 1 is static analysis. Every check below also runs in CI; `npm run format` is the local fixer and writes files, so CI runs `npm run format:check` in its place.
 
 ```bash
 npm ci                             # once per checkout; the pinned text tools

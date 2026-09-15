@@ -24,9 +24,11 @@ gitleaks detect --no-banner
 
 ## Prettier formats, markdownlint verifies
 
-Prettier owns the layout of every file type it supports: Markdown, YAML, JSON and JSONC. CI runs `prettier --check .`, because that is what `cboone/gh-actions` `lint-text.yml` runs, and `npm run format:check` is the same string. markdownlint then verifies the Markdown for what no formatter has an opinion about, including relative links.
+Prettier owns the layout of every file type it supports: Markdown, YAML, JSON and JSONC. markdownlint verifies the Markdown for what no formatter has an opinion about, including relative links. CI runs both as checks, through `cboone/gh-actions` `lint-text.yml`: `markdownlint-cli2 "**/*.md"` first, then `prettier --check .`, which are the same strings as `npm run lint:md` and `npm run format:check`.
 
-**Run Prettier before markdownlint, and never pass `--fix` to `markdownlint-cli2`.** Its `--fix` ignores the file arguments it is given and rewrites every file matching the `globs` in `.markdownlint-cli2.jsonc`, and it has no fixer for `MD060` at any version, so it cannot fix the table alignment it reports. `npm run format` is the fixer.
+**The CI order hides findings.** `lint-text.yml` runs its Prettier step only when markdownlint passed, so a change that trips both shows only markdownlint's findings until those are fixed. Measured on 2026-09-14 in PR #1: a plant with both kinds of defect reported `Run Prettier check: skipped`, and a Prettier-only plant then failed that step. Filed as [cboone/gh-actions#112](https://github.com/cboone/gh-actions/issues/112). Running both locally before pushing avoids the second round trip.
+
+**Locally, run Prettier before markdownlint, and never pass `--fix` to `markdownlint-cli2`.** Formatting first means markdownlint judges the layout Prettier settled. Its `--fix` ignores the file arguments it is given and rewrites every file matching the `globs` in `.markdownlint-cli2.jsonc`, and it has no fixer for `MD060` at any version, so it cannot fix the table alignment it reports. `npm run format` is the fixer.
 
 **This replaces two catalog skills' fix steps.** `lint-and-fix` passes each detected linter its fix flag, and `write-markdown`'s validation step asks for markdownlint in fix mode. In this repository both are satisfied by `npm run format` followed by `npm run lint:md`. See [skill deviations](./skill-deviations.md).
 

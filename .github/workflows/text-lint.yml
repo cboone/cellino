@@ -34,8 +34,13 @@ permissions:
 # `shell / Shell lint` and `actions / actionlint`, distinct from each other and
 # from the secret-scanning workflows' rows.
 jobs:
-  # Prettier over every file type it supports (`prettier --check .`), then
-  # markdownlint over `**/*.md`, which includes the relative-links custom rule.
+  # markdownlint over `**/*.md`, which includes the relative-links custom rule,
+  # then Prettier over every file type it supports (`prettier --check .`). That
+  # is the reusable workflow's order, and it is the reverse of the local fix
+  # order (format first, then lint) documented in docs/notes/linters.md. Its
+  # Prettier step also runs only when markdownlint passed, so a change with
+  # both kinds of defect shows the Prettier half only after the markdownlint
+  # half is fixed (cboone/gh-actions#112).
   #
   # `use-consumer-versions: true` installs both tools from this repository's
   # package-lock.json with `npm ci` in the workspace, so local runs and CI
