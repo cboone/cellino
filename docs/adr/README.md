@@ -23,3 +23,6 @@ All twenty-three were locked in the planning pass on 2026-09-13, before any code
 | [0013](./0013-keys-are-continuous-valves.md)                         | Keys are continuous valves                                                     | Accepted |
 | [0014](./0014-flow-derivative-through-an-enclosure-filter.md)        | The output is the derivative of total reed flow through an enclosure filter    | Accepted |
 | [0015](./0015-python-discovers-the-reed-and-freezes-as-oracle.md)    | Python discovers the single reed and is frozen as the oracle for that seam     | Accepted |
+| [0016](./0016-harnesses-are-build-steps.md)                          | Harnesses are executables behind their own build steps                         | Accepted |
+| [0021](./0021-distribute-as-a-notarized-pkg.md)                      | Distribute as one signed, notarized, stapled pkg                               | Accepted |
+| [0022](./0022-stamp-provenance-without-namespacing-identity.md)      | Stamp build provenance, and leave plugin identity alone                        | Accepted |
