@@ -14,7 +14,7 @@ Keys are continuous valves. Key depth sets the pallet orifice area through a tra
 
 ## Consequences
 
-**Depth needs a source, and the host decides which exists.** It comes from a per-note pressure expression, from polyphonic aftertouch, or from the note-on itself when the host has neither, selected by the stepped Key Depth Source parameter. Through clap-wrapper in Logic, polyphonic key pressure arrives per key, which is what makes depth playable there ([ADR 0023](./0023-one-note-port-and-one-stereo-output.md)).
+**Depth needs a source, and the host decides which exists.** It comes from a per-note pressure expression, from polyphonic aftertouch, or, when the host has neither, from the note-on and note-off events alone: full depth while the key is held and none after it is released, selected by the stepped Key Depth Source parameter. **That fallback never reads velocity.** A note-on's velocity sets how fast the pallet reaches full depth and how loud the key noise is, never how deep it goes, so pitch and loudness stay velocity-independent in every depth source. Through clap-wrapper in Logic, polyphonic key pressure arrives per key, which is what makes depth playable there ([ADR 0023](./0023-one-note-port-and-one-stereo-output.md)).
 
 **Partial depth does three things together**: the note comes in quieter, fades in rather than starting, and sits slightly flat. The null arm of the by-hand check is full depth, where none of the three happens.
 
