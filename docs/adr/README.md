@@ -24,5 +24,10 @@ All twenty-three were locked in the planning pass on 2026-09-13, before any code
 | [0014](./0014-flow-derivative-through-an-enclosure-filter.md)        | The output is the derivative of total reed flow through an enclosure filter    | Accepted |
 | [0015](./0015-python-discovers-the-reed-and-freezes-as-oracle.md)    | Python discovers the single reed and is frozen as the oracle for that seam     | Accepted |
 | [0016](./0016-harnesses-are-build-steps.md)                          | Harnesses are executables behind their own build steps                         | Accepted |
+| [0017](./0017-the-modulation-surface.md)                             | The modulation surface: heard equals value plus modulation                     | Accepted |
+| [0018](./0018-tuning-tables-and-a-reed-family.md)                    | Tuning tables plus per-note tuning; continuous pitch moves along a reed family | Accepted |
+| [0019](./0019-a-pressure-blown-indian-harmonium-and-nothing-else.md) | Savera models a pressure-blown Indian hand harmonium and nothing else          | Accepted |
+| [0020](./0020-defer-the-gui.md)                                      | The GUI is deferred; the parameter set is the interface                        | Accepted |
 | [0021](./0021-distribute-as-a-notarized-pkg.md)                      | Distribute as one signed, notarized, stapled pkg                               | Accepted |
 | [0022](./0022-stamp-provenance-without-namespacing-identity.md)      | Stamp build provenance, and leave plugin identity alone                        | Accepted |
+| [0023](./0023-one-note-port-and-one-stereo-output.md)                | One note input port and one stereo output port                                 | Accepted |
