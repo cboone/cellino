@@ -62,16 +62,16 @@ git ls-files -z | xargs -0 shfmt -f | xargs -r shellcheck
 
 ## Timeouts
 
-Every timeout is carried from fosforo until this repository has runs of its own to measure. They are ceilings, not predictions, and each is re-measured from real runs and recorded here with its run ids.
+Every timeout was carried from fosforo when the workflows landed. They are ceilings, not predictions. The last column is the longest job duration, from start to completion, over this repository's two clean-tree runs so far: text-lint runs 34915386623 and 34915723980, gitleaks runs 34915386624 and 34915723892, and TruffleHog runs 34915386601 and 34915723956, all on PR #1 on 2026-09-14. Two runs justify keeping the carried ceilings, not lowering them; re-measure over more runs before changing one.
 
-| Job          | Timeout (minutes) | Source                                                              | Measured here |
-| ------------ | ----------------- | ------------------------------------------------------------------- | ------------- |
-| `text`       | 5                 | fosforo's floor of 3, plus room for `npm ci` of the whole tool tree | Not yet       |
-| `shell`      | 3                 | fosforo's Ubuntu static-analysis floor                              | Not yet       |
-| `actions`    | 3                 | fosforo's Ubuntu static-analysis floor                              | Not yet       |
-| `typos`      | 3                 | fosforo's typos job, 14 seconds at most over its first 27 runs      | Not yet       |
-| `gitleaks`   | 3                 | fosforo's gitleaks job, 24 seconds at most over 29 runs             | Not yet       |
-| `trufflehog` | 3                 | fosforo's TruffleHog job, 53 seconds at most over 28 runs           | Not yet       |
+| Job          | Timeout (minutes) | Source                                                              | Measured here, longest of 2 runs |
+| ------------ | ----------------- | ------------------------------------------------------------------- | -------------------------------- |
+| `text`       | 5                 | fosforo's floor of 3, plus room for `npm ci` of the whole tool tree | 15 seconds                       |
+| `shell`      | 3                 | fosforo's Ubuntu static-analysis floor                              | 6 seconds, finding nothing       |
+| `actions`    | 3                 | fosforo's Ubuntu static-analysis floor                              | 6 seconds                        |
+| `typos`      | 3                 | fosforo's typos job, 14 seconds at most over its first 27 runs      | 6 seconds                        |
+| `gitleaks`   | 3                 | fosforo's gitleaks job, 24 seconds at most over 29 runs             | 6 seconds                        |
+| `trufflehog` | 3                 | fosforo's TruffleHog job, 53 seconds at most over 28 runs           | 10 seconds                       |
 
 For the reusable calls the timeout is a `timeout-minutes` input, not a job key, because the job belongs to the reusable workflow. Since gh-actions v3.2.0, `scan-for-secrets.yml` applies it to its `Validate inputs` job as well.
 
