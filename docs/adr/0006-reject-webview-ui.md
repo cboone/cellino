@@ -23,5 +23,3 @@ There is no asynchronous boundary between the interface and the engine to design
 This decision is about the mechanism, not the schedule. [ADR 0020](./0020-defer-the-gui.md) defers the GUI itself; this one constrains what it may be built from when it arrives. Whether that GUI shows state-variable plots, which would reserve fosforo's ring buffer and display-link machinery, is decided then; nothing is reserved now.
 
 The cost is that the eventual interface is native code rather than markup, and cannot be developed or previewed outside a host. That is accepted.
-
-The reciever of this decision is the GUI phase.
