@@ -24,6 +24,7 @@ The checks below are the ones that exist today. Each phase adds its own lines as
 - [ ] I have read the [CONTRIBUTING](https://github.com/cboone/savera/blob/main/CONTRIBUTING.md) guide
 - [ ] I ran `npm ci`, then `npm run format:check` and `npm run lint:md` are both clean (never `markdownlint-cli2 --fix`)
 - [ ] The spell check passes (`typos`)
+- [ ] `gitleaks detect --no-banner` reports no leaks (the TruffleHog CI job cannot fail, so gitleaks is the secret check that counts)
 - [ ] If I touched anything under `.github/workflows/`, `actionlint` is silent, run with `shellcheck` on `PATH`
 - [ ] If I touched a shell script, `shfmt -d` and `shellcheck` are both silent
 - [ ] `docs/design/` is byte-identical: `git diff --exit-code origin/main -- docs/design/` prints nothing
