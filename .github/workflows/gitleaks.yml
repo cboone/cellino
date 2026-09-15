@@ -34,4 +34,4 @@ jobs:
       # An input rather than a job key, because the job belongs to the reusable
       # workflow, whose own default is 15. Since v3.2.0 it bounds that
       # workflow's `Validate inputs` job as well (cboone/gh-actions#81).
-      timeout-minutes: 3
+      timeout-minutes:  3
